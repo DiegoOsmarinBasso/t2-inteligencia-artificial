@@ -57,8 +57,8 @@ public class UI {
 	public static Position readPosition(Scanner sc) {
 		try {
 			String s = sc.nextLine();
-			int row = Integer.parseInt(s.substring(0,1));
-			int column = Integer.parseInt(s.substring(1,2));
+			int row = Integer.parseInt(s.substring(0, 1));
+			int column = Integer.parseInt(s.substring(1, 2));
 
 			return new Position(row, column);
 		} catch (RuntimeException e) {
@@ -75,8 +75,6 @@ public class UI {
 				System.out.print(ANSI_CYAN_BACKGROUND + piece + ANSI_RESET);
 			} else if (color == Color.GREEN) {
 				System.out.print(ANSI_GREEN_BACKGROUND + piece + ANSI_RESET);
-			} else if (color == Color.PURPLE) {
-				System.out.print(ANSI_PURPLE_BACKGROUND + piece + ANSI_RESET);
 			} else if (color == Color.RED) {
 				System.out.print(RED_BOLD_BRIGHT + piece + ANSI_RESET);
 			} else if (color == Color.YELLOW) {
@@ -94,11 +92,7 @@ public class UI {
 		printCapturedBags(captured);
 		System.out.println();
 
-		if (!chessMatch.getFinalizeMaze()) {
-			if (chessMatch.getAllBags()) {
-				System.out.println("ALL BAGS!");
-			}
-		} else {
+		if (chessMatch.getFinalizeMaze()) {
 			System.out.println("MAZE OVER!");
 		}
 	}
@@ -107,7 +101,7 @@ public class UI {
 		int rows = pieces.length;
 		int columns = pieces[0].length;
 
-		System.out.println("    0   1   2   3   4   5   6   7   8   9   \n");
+		System.out.println("\n    0   1   2   \n");
 		for (int i = 0; i < rows; i++) {
 			System.out.print(i + "   ");
 			for (int j = 0; j < columns; j++) {
@@ -116,7 +110,7 @@ public class UI {
 			}
 			System.out.print(i + "\n\n");
 		}
-		System.out.println("    0   1   2   3   4   5   6   7   8   9   \n");
+		System.out.println("    0   1   2   \n");
 	}
 
 	private static void printCapturedBags(List<Bag> captured) {
