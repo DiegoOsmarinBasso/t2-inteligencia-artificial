@@ -19,6 +19,7 @@ public class MazeMatch {
 	protected static final int JUMP = 2;
 
 	private Board board;
+	private Position agentPosition;
 	private boolean finalizeMaze;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -46,23 +47,21 @@ public class MazeMatch {
 		return mat;
 	}
 
-	public Bag performMazeMove(Position source, Position target) {
+	public Piece performMazeMove(Position source, Position target) {
 		Agent a = (Agent) board.removePiece(source);
 		Piece piece = board.removePiece(target);
 
 		if (piece instanceof Door) {
 			finalizeMaze = true;
-			piece = null;
 		}
 
 		if (piece instanceof Bag) {
 			piecesOnTheBoard.remove((Bag) piece);
 			capturedPieces.add((Bag) piece);
-
 		}
-		board.placePiece(a, target);
-		return (Bag) piece;
 
+		board.placePiece(a, target);
+		return piece;
 	}
 
 	public void validateSourcePosition(Position position) {
@@ -84,7 +83,98 @@ public class MazeMatch {
 		piecesOnTheBoard.add(piece);
 	}
 
+	public int getAgentsNeighbor(int i, int j) {
+		int row = agentPosition.getRow() + i;
+		int column = agentPosition.getColumn() + j;
+
+		// Se fora do mapa retorna 1 - Parede
+		if (i < 0 || i >= BOARD_ROWS || j < 0 || j >= BOARD_COLUMNS) {
+			return 1;
+		}
+
+		// Obtem a peca da posicao
+		Piece piece = board.piece(new Position(row, column));
+
+		// 1 - Parede
+		if (piece instanceof Wall) {
+			return 1;
+		}
+
+		// 2 - Celula em branco
+		if (piece == null) {
+			return 2;
+		}
+
+		// 3 - Buraco
+		if (piece instanceof Hole) {
+			return 3;
+		}
+
+		// 4 - Saco de moedas
+		if (piece instanceof Bag) {
+			return 4;
+		}
+
+		// 5 - Porta
+		if (piece instanceof Door) {
+			return 5;
+		}
+
+		// Caso base, nao deve acontecer
+		return 0;
+	}
+
+	public int performAgentMove(int i, int j) {
+		
+		int points = 0;
+		int row = agentPosition.getRow() + i;
+		int column = agentPosition.getColumn() + j;
+		Position target = new Position(row, column);
+
+		Piece piece = board.piece(target);
+
+		// 1 - Parede: nao adiciona pontos
+		if (piece instanceof Wall) {
+			points = 0;
+		}
+
+		// 2 - Celula em branco: adiciona 1 ponto
+		if (piece == null) {
+			points = 1;
+		}
+
+		// 3 - Buraco: pular buraco adiciona 3 pontos
+		if (piece instanceof Hole) {
+			row = agentPosition.getRow() + 2 * i;
+			column = agentPosition.getColumn() + 2 * j;
+			target = new Position(row, column);
+
+			points = 3;
+		}
+		
+		// 4 - Saco de moedas: adiciona 10 pontos
+		if (piece instanceof Bag) {
+			points = 10;
+		}
+
+		// 5 - Porta: adiciona 100 pontos
+		if (piece instanceof Door) {
+			points = 100;
+		}
+
+		validateTargetPosition(target);
+
+		performMazeMove(agentPosition, target);
+		agentPosition.setRow(target.getRow());
+		agentPosition.setColumn(target.getColumn());
+
+		return points;
+	}
+
 	private void InitialSetup() {
+
+		// Agent Position
+		agentPosition = new Position(0, 0);
 
 		// Line 0
 		placeNewPiece(0, 0, new Agent(board, Color.WHITE));
