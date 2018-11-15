@@ -20,19 +20,19 @@ public class MazeMatch {
 
 	private Board board;
 	private Position agentPosition;
-	private boolean finalizeMaze;
+	private boolean theEnd;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
 
 	public MazeMatch() {
 		board = new Board(BOARD_ROWS, BOARD_COLUMNS);
-		finalizeMaze = false;
+		theEnd = false;
 		InitialSetup();
 	}
 
-	public boolean getFinalizeMaze() {
-		return finalizeMaze;
+	public boolean isTheEnd() {
+		return theEnd;
 	}
 
 	public MazePiece[][] getPieces() {
@@ -52,7 +52,7 @@ public class MazeMatch {
 		Piece piece = board.removePiece(target);
 
 		if (piece instanceof Door) {
-			finalizeMaze = true;
+			theEnd = true;
 		}
 
 		if (piece instanceof Bag) {
@@ -88,7 +88,7 @@ public class MazeMatch {
 		int column = agentPosition.getColumn() + j;
 
 		// Se fora do mapa retorna 1 - Parede
-		if (i < 0 || i >= BOARD_ROWS || j < 0 || j >= BOARD_COLUMNS) {
+		if (row < 0 || row >= BOARD_ROWS || column < 0 || column >= BOARD_COLUMNS) {
 			return 1;
 		}
 
@@ -124,8 +124,8 @@ public class MazeMatch {
 		return 0;
 	}
 
-	public int performAgentMove(int i, int j) {
-		
+	public int performAgentMove(int i, int j, List<Bag> captured) {
+
 		int points = 0;
 		int row = agentPosition.getRow() + i;
 		int column = agentPosition.getColumn() + j;
@@ -150,16 +150,19 @@ public class MazeMatch {
 			target = new Position(row, column);
 
 			points = 3;
+
+			piece = board.piece(target);
 		}
-		
+
 		// 4 - Saco de moedas: adiciona 10 pontos
 		if (piece instanceof Bag) {
-			points = 10;
+			captured.add((Bag) piece);
+			points += 10;
 		}
 
 		// 5 - Porta: adiciona 100 pontos
 		if (piece instanceof Door) {
-			points = 100;
+			points += 100;
 		}
 
 		validateTargetPosition(target);

@@ -1,6 +1,7 @@
 package boardgame;
 
 import maze.pieces.Bag;
+import maze.pieces.Door;
 
 public class Board {
 
@@ -58,7 +59,7 @@ public class Board {
 
 		Piece aux = piece(position);
 
-		if (aux instanceof Bag) {
+		if (aux instanceof Bag || aux instanceof Door) {
 			aux.position = null;
 		}
 		

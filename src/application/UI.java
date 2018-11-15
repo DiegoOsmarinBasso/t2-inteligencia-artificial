@@ -86,15 +86,8 @@ public class UI {
 	}
 
 	public static void printMatch(MazeMatch chessMatch, List<Bag> captured) {
-
 		printTabBoard(chessMatch.getPieces());
-
 		printCapturedBags(captured);
-		System.out.println();
-
-		if (chessMatch.getFinalizeMaze()) {
-			System.out.println("MAZE OVER!");
-		}
 	}
 
 	public static void printTabBoard(MazePiece[][] pieces) {
@@ -114,7 +107,7 @@ public class UI {
 	}
 
 	private static void printCapturedBags(List<Bag> captured) {
-		System.out.println("Captured Bags: " + YELLOW_BOLD_BRIGHT + Arrays.toString(captured.toArray()) + ANSI_RESET);
+		System.out.println("Sacos de moedas: " + YELLOW_BOLD_BRIGHT + Arrays.toString(captured.toArray()) + ANSI_RESET);
 	}
 
 }
