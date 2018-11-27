@@ -12,7 +12,7 @@ public class Wall extends MazePiece {
 
 	@Override
 	public String toString() {
-		return " ";
+		return "P";
 	}
 
 }

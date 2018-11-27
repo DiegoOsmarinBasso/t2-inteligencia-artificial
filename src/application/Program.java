@@ -19,8 +19,12 @@ public class Program {
 	private static int MILIS = 0;
 	private static int generation = 0;
 	private static int theEnd = -1;
+	private static boolean colors;
 
 	public static void main(String[] args) {
+
+		// Mapa colorido
+		colors = args.length > 0 ? true : false;
 
 		/*
 		 * INSTANCIA JA CRAINDO A POPULACAO INICIAL
@@ -98,7 +102,7 @@ public class Program {
 
 			// Agente autonomo solicita a direcao para o mapa
 			agent.setDirection(neuralNetwork.getDirection(left, up, right, down));
-			
+
 			// Agente informa a direcao para a qual vai se mover
 			direction = agent.getDirection();
 
@@ -159,13 +163,13 @@ public class Program {
 	private static void printMazeStatus(MazeMatch mazeMatch, List<Bag> captured, int left, int up, int right, int down,
 			int index, int points) {
 
-		UI.clearScreen();
+		if (colors) UI.clearScreen();
 		System.out.println("Geracao " + generation + " - Cromossomo " + index);
 		System.out.println("esq  : " + left);
 		System.out.println("cima : " + up);
 		System.out.println("dir  : " + right);
 		System.out.println("baixo: " + down);
-		UI.printMatch(mazeMatch, captured);
+		UI.printMatch(mazeMatch, captured, colors);
 		System.out.println("Pontuacao " + points + "\n");
 	}
 

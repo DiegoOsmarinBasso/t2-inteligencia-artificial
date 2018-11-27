@@ -66,10 +66,13 @@ public class UI {
 		}
 	}
 
-	private static void printPiece(MazePiece piece) {
+	private static void printPiece(MazePiece piece, boolean colors) {
 		if (piece == null) {
-			System.out.print("-" + ANSI_RESET);
-		} else {
+			if (colors)
+				System.out.print("-" + ANSI_RESET);
+			else
+				System.out.print("-");
+		} else if (colors) {
 			Color color = piece.getColor();
 			if (color == Color.CYAN) {
 				System.out.print(ANSI_CYAN_BACKGROUND + piece + ANSI_RESET);
@@ -82,15 +85,17 @@ public class UI {
 			} else if (color == Color.WHITE) {
 				System.out.print(WHITE_BOLD_BRIGHT + piece + ANSI_RESET);
 			}
+		} else {
+			System.out.print(piece);
 		}
 	}
 
-	public static void printMatch(MazeMatch chessMatch, List<Bag> captured) {
-		printTabBoard(chessMatch.getPieces());
-		printCapturedBags(captured);
+	public static void printMatch(MazeMatch chessMatch, List<Bag> captured, boolean colors) {
+		printTabBoard(chessMatch.getPieces(), colors);
+		printCapturedBags(captured, colors);
 	}
 
-	public static void printTabBoard(MazePiece[][] pieces) {
+	public static void printTabBoard(MazePiece[][] pieces, boolean colors) {
 		int rows = pieces.length;
 		int columns = pieces[0].length;
 
@@ -98,7 +103,7 @@ public class UI {
 		for (int i = 0; i < rows; i++) {
 			System.out.print(i + "   ");
 			for (int j = 0; j < columns; j++) {
-				printPiece(pieces[i][j]);
+				printPiece(pieces[i][j], colors);
 				System.out.print("   ");
 			}
 			System.out.print(i + "\n\n");
@@ -106,8 +111,12 @@ public class UI {
 		System.out.println("    0   1   2   \n");
 	}
 
-	private static void printCapturedBags(List<Bag> captured) {
-		System.out.println("Sacos de moedas: " + YELLOW_BOLD_BRIGHT + Arrays.toString(captured.toArray()) + ANSI_RESET);
+	private static void printCapturedBags(List<Bag> captured, boolean colors) {
+		if (colors)
+			System.out.println(
+					"Sacos de moedas: " + YELLOW_BOLD_BRIGHT + Arrays.toString(captured.toArray()) + ANSI_RESET);
+		else
+			System.out.println("Sacos de moedas: " + Arrays.toString(captured.toArray()));
 	}
 
 }

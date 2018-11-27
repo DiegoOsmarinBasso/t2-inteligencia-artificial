@@ -12,7 +12,7 @@ public class Door extends MazePiece {
 
 	@Override
 	public String toString() {
-		return " ";
+		return "D";
 	}
 
 }
