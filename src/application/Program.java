@@ -7,6 +7,7 @@ import ai.NeuralNetwork;
 import ai.geneticAlgorithm;
 import boardgame.BoardException;
 import maze.MazeMatch;
+import maze.pieces.Agent;
 import maze.pieces.Bag;
 
 public class Program {
@@ -82,7 +83,9 @@ public class Program {
 	private static void simulatePopulation(NeuralNetwork neuralNetwork, int index) {
 
 		MazeMatch mazeMatch = new MazeMatch();
+		Agent agent = mazeMatch.getAgent();
 		List<Bag> captured = new ArrayList<>();
+		char direction;
 		int heuristic = 0;
 
 		do {
@@ -93,7 +96,11 @@ public class Program {
 
 			printMazeStatus(mazeMatch, captured, left, up, right, down, index, neuralNetwork.getPoints());
 
-			char direction = neuralNetwork.getDirection(left, up, right, down);
+			// Agente autonomo solicita a direcao para o mapa
+			agent.setDirection(neuralNetwork.getDirection(left, up, right, down));
+			
+			// Agente informa a direcao para a qual vai se mover
+			direction = agent.getDirection();
 
 			sleep(1);
 

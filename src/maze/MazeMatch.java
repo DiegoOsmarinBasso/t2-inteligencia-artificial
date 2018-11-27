@@ -19,6 +19,7 @@ public class MazeMatch {
 	protected static final int JUMP = 2;
 
 	private Board board;
+	private Agent agent;
 	private Position agentPosition;
 	private boolean theEnd;
 
@@ -27,10 +28,15 @@ public class MazeMatch {
 
 	public MazeMatch() {
 		board = new Board(BOARD_ROWS, BOARD_COLUMNS);
+		agent = new Agent(board, Color.WHITE);
 		theEnd = false;
 		InitialSetup();
 	}
 
+	public Agent getAgent() {
+		return agent;
+	}
+	
 	public boolean isTheEnd() {
 		return theEnd;
 	}
@@ -180,7 +186,7 @@ public class MazeMatch {
 		agentPosition = new Position(0, 0);
 
 		// Line 0
-		placeNewPiece(0, 0, new Agent(board, Color.WHITE));
+		placeNewPiece(0, 0, agent);
 		placeNewPiece(0, 1, new Wall(board, Color.CYAN));
 		placeNewPiece(0, 2, new Wall(board, Color.CYAN));
 
